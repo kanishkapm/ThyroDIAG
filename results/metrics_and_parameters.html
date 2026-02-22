@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thyroid Cancer Classification - Metrics and Parameters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .subtitle {
+            color: #00d4ff;
+            font-weight: 300;
+            margin-top: 10px;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 15px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #495057;
+            background: white;
+            border-radius: 25px;
+            transition: all 0.3s;
+            border: 1px solid #dee2e6;
+        }
+
+        nav a:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        section {
+            padding: 40px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        section h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        section h2::before {
+            content: '';
+            width: 5px;
+            height: 40px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 5px;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .card h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .stat-box .number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .stat-box .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .metric-high {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .metric-medium {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .concept-box h4 {
+            margin-bottom: 10px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .gene-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .gene-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .formula {
+            background: #1a1a2e;
+            color: #00d4ff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.5s;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            padding: 8px 0;
+        }
+
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .dl-architecture {
+            background: #1a1a2e;
+            color: #00d4ff;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Thyroid Cancer Classification Project</h1>
+            <p class="subtitle">Metrics, Parameters & Model Documentation</p>
+            <p>Author: Kanishka P M, MSc Bioinformatics</p>
+        </header>
+
+        <nav>
+            <a href="#overview">Overview</a>
+            <a href="#dataset">Dataset</a>
+            <a href="#genes">Gene Expression</a>
+            <a href="#traditional">Traditional ML</a>
+            <a href="#deeplearning">Deep Learning</a>
+            <a href="#concepts">Concepts</a>
+            <a href="#parameters">Parameters</a>
+        </nav>
+
+        <section id="overview">
+            <h2>Project Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number">331</div>
+                    <div class="label">Total Genes</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">360</div>
+                    <div class="label">Total Samples</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">6</div>
+                    <div class="label">GEO Datasets</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">4</div>
+                    <div class="label">Cancer Subtypes</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h3>Project Summary</h3>
+                <p>This project implements an advanced thyroid cancer classification pipeline using:</p>
+                <ul style="margin-top: 15px; margin-left: 20px;">
+                    <li><strong>Multi-source data integration</strong>: Combining GEO and TCGA databases</li>
+                    <li><strong>Traditional Machine Learning</strong>: Random Forest, SVM, Gradient Boosting, KNN, MLP</li>
+                    <li><strong>Deep Learning</strong>: 1D CNN, LSTM, Transformer, Autoencoder</li>
+                    <li><strong>Ensemble Methods</strong>: Stacking, Voting, Hybrid approaches</li>
+                    <li><strong>Feature Selection</strong>: LASSO for biomarker discovery</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="dataset">
+            <h2>Dataset Information</h2>
+
+            <div class="card">
+                <h3>GEO Data Sources</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dataset</th>
+                            <th>Samples</th>
+                            <th>Description</th>
+                            <th>Platform</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GSE33630</strong></td>
+                            <td>105</td>
+                            <td>Thyroid carcinoma gene expression</td>
+                            <td>Affymetrix</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GSE60541</strong></td>
+                            <td>60</td>
+                            <td>Papillary thyroid carcinoma</td>
+                            <td>Affymetrix</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GSE76039</strong></td>
+                            <td>55</td>
+                            <td>Anaplastic thyroid cancer</td>
+                            <td>Affymetrix</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GSE29265</strong></td>
+                            <td>50</td>
+                            <td>Follicular thyroid carcinoma</td>
+                            <td>Affymetrix</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GSE53157</strong></td>
+                            <td>50</td>
+                            <td>Thyroid nodules</td>
+                            <td>Affymetrix</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GSE3467</strong></td>
+                            <td>40</td>
+                            <td>Thyroid carcinoma vs normal</td>
+                            <td>Affymetrix</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 15px;"><strong>Total Samples:</strong> 360</p>
+            </div>
+
+            <div class="card">
+                <h3>Cancer Subtypes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Subtype</th>
+                            <th>Full Name</th>
+                            <th>Samples</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-success">PTC</span></td>
+                            <td>Papillary Thyroid Carcinoma</td>
+                            <td>164</td>
+                            <td>Most common type (~80% of cases)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-primary">Normal</span></td>
+                            <td>Normal Thyroid Tissue</td>
+                            <td>85</td>
+                            <td>Healthy control samples</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-primary">ATC</span></td>
+                            <td>Anaplastic Thyroid Carcinoma</td>
+                            <td>61</td>
+                            <td>Most aggressive form</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-primary">FTC</span></td>
+                            <td>Follicular Thyroid Carcinoma</td>
+                            <td>50</td>
+                            <td>Second most common</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Data Preprocessing</h3>
+                <p>The following preprocessing steps were applied to the raw GEO data:</p>
+                <ul style="margin-top: 15px; margin-left: 20px;">
+                    <li><strong>Missing Value Imputation:</strong> Using gene-specific mean values</li>
+                    <li><strong>Normalization:</strong> Z-score standardization (mean=0, std=1)</li>
+                    <li><strong>Batch Effect Correction:</strong> ComBat or similar methods for combining datasets</li>
+                    <li><strong>Gene Filtering:</strong> Remove low-variance genes</li>
+                    <li><strong>Label Encoding:</strong> Convert categorical labels to numeric</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="genes">
+            <h2>Gene Expression Analysis</h2>
+
+            <div class="card">
+                <h3>Expression Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="number">0.3035</div>
+                        <div class="label">Mean Expression</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">0.2650</div>
+                        <div class="label">Median Expression</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">1.5047</div>
+                        <div class="label">Max Expression</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">0.2320</div>
+                        <div class="label">Min Expression</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Top 20 Highly Expressed Genes (Biomarkers)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Gene</th>
+                            <th>Mean Expression</th>
+                            <th>Role in Thyroid Cancer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>PAX8</strong></td>
+                            <td>1.5047</td>
+                            <td>Thyroid transcription factor</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>BRAF</strong></td>
+                            <td>1.1871</td>
+                            <td>Oncogene (V600E mutation common in PTC)</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>FN1</strong></td>
+                            <td>1.1755</td>
+                            <td>Fibronectin (extracellular matrix)</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>GALECTIN3</strong></td>
+                            <td>0.9669</td>
+                            <td>Galectin-3 (diagnostic marker)</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>CITED1</strong></td>
+                            <td>0.9644</td>
+                            <td>Transcriptional co-activator</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><strong>HMGA2</strong></td>
+                            <td>0.9560</td>
+                            <td>High mobility group protein</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td><strong>TFF3</strong></td>
+                            <td>0.9530</td>
+                            <td>Trefoil factor 3</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td><strong>KRT19</strong></td>
+                            <td>0.9492</td>
+                            <td>Cytokeratin 19 (diagnostic marker)</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td><strong>RET</strong></td>
+                            <td>0.9456</td>
+                            <td>REarranged during Transfection (PTC driver)</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td><strong>THRB</strong></td>
+                            <td>0.8401</td>
+                            <td>Thyroid hormone receptor beta</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td><strong>SLC5A5</strong></td>
+                            <td>0.6127</td>
+                            <td>Sodium iodide symporter (NIS)</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td><strong>DIO2</strong></td>
+                            <td>0.6009</td>
+                            <td>Type 2 deiodinase</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td><strong>SLC26A4</strong></td>
+                            <td>0.5983</td>
+                            <td>Pendrin (iodide transport)</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td><strong>TSHR</strong></td>
+                            <td>0.5482</td>
+                            <td>TSH receptor</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td><strong>TPO</strong></td>
+                            <td>0.5444</td>
+                            <td>Thyroid peroxidase</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td><strong>DIO1</strong></td>
+                            <td>0.5367</td>
+                            <td>Type 1 deiodinase</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td><strong>TG</strong></td>
+                            <td>0.5350</td>
+                            <td>Thyroglobulin (clinical marker)</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td><strong>VIM</strong></td>
+                            <td>0.5287</td>
+                            <td>Vimentin (EMT marker)</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td><strong>SNAI1</strong></td>
+                            <td>0.5261</td>
+                            <td>Snail (EMT transcription factor)</td>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td><strong>NIS</strong></td>
+                            <td>0.5197</td>
+                            <td>Sodium/iodide symporter</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Gene Expression Threshold</h3>
+                <p>When combining multiple GEO datasets, different datasets may have different expression values for the same gene due to batch effects or different normalization methods.</p>
+
+                <div class="formula">
+                    <strong>Mean Expression Calculation:</strong><br>
+                    Mean(gene) = Σ(expression_value) / n_samples<br><br>
+                    <strong>Example:</strong> PAX8 = (1.45 + 1.52 + 1.56 + ...) / 360 = 1.5047
+                </div>
+
+                <h4 style="margin-top: 20px;">Available Thresholds</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Threshold</th>
+                            <th>Genes Retained</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>> 0.25</td>
+                            <td>~165 genes</td>
+                            <td>Moderate filtering (above median)</td>
+                        </tr>
+                        <tr>
+                            <td>> 0.50</td>
+                            <td>~40 genes</td>
+                            <td>Highly expressed genes</td>
+                        </tr>
+                        <tr>
+                            <td>> 1.00</td>
+                            <td>~10 genes</td>
+                            <td>Top biomarkers only</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>LASSO-Selected Genes (Feature Selection)</h3>
+                <p>LASSO (Least Absolute Shrinkage and Selection Operator) was used to select the most important genes from 331 original features, reducing to 82 key biomarkers.</p>
+                <p><strong>Cross-validation Accuracy:</strong> 99.72% ± 0.56%</p>
+
+                <div class="gene-list">
+                    <span class="gene-tag">DIO1</span>
+                    <span class="gene-tag">NIS</span>
+                    <span class="gene-tag">TSHR</span>
+                    <span class="gene-tag">TG</span>
+                    <span class="gene-tag">SLC5A5</span>
+                    <span class="gene-tag">DIO2</span>
+                    <span class="gene-tag">SLC26A4</span>
+                    <span class="gene-tag">TPO</span>
+                    <span class="gene-tag">HNF1A</span>
+                    <span class="gene-tag">THRB</span>
+                    <span class="gene-tag">GALNT12</span>
+                    <span class="gene-tag">BCL2L1</span>
+                    <span class="gene-tag">RPL17</span>
+                    <span class="gene-tag">CREB3L2</span>
+                    <span class="gene-tag">WWTR1</span>
+                    <span class="gene-tag">NR0B1</span>
+                    <span class="gene-tag">RPL9</span>
+                    <span class="gene-tag">MAPK1</span>
+                    <span class="gene-tag">ESR2</span>
+                    <span class="gene-tag">NOP10</span>
+                    <span class="gene-tag">PIK3CB</span>
+                    <span class="gene-tag">TINF2</span>
+                    <span class="gene-tag">EPAS1</span>
+                    <span class="gene-tag">WNT5B</span>
+                    <span class="gene-tag">FN1</span>
+                    <span class="gene-tag">PD1</span>
+                    <span class="gene-tag">PGD</span>
+                    <span class="gene-tag">RPL27</span>
+                    <span class="gene-tag">ZEB2</span>
+                    <span class="gene-tag">RPL29</span>
+                    <span class="gene-tag">BRAF</span>
+                    <span class="gene-tag">PPARG</span>
+                    <span class="gene-tag">STAT3</span>
+                    <span class="gene-tag">BAD</span>
+                    <span class="gene-tag">CDK6</span>
+                    <span class="gene-tag">COL1A2</span>
+                    <span class="gene-tag">RPL7</span>
+                    <span class="gene-tag">HRK</span>
+                    <span class="gene-tag">GATA4</span>
+                    <span class="gene-tag">GATA6</span>
+                    <span class="gene-tag">PMAIP1</span>
+                    <span class="gene-tag">KRT8</span>
+                    <span class="gene-tag">NFKB2</span>
+                    <span class="gene-tag">PGK1</span>
+                    <span class="gene-tag">RPL15</span>
+                    <span class="gene-tag">NTRK3</span>
+                    <span class="gene-tag">RARA</span>
+                    <span class="gene-tag">E2F3</span>
+                    <span class="gene-tag">XRCC1</span>
+                    <span class="gene-tag">SNAI2</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="traditional">
+            <h2>Traditional Machine Learning Models</h2>
+
+            <div class="card">
+                <h3>Model Performance Comparison</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1-Score</th>
+                            <th>ROC-AUC</th>
+                            <th>CV Mean</th>
+                            <th>CV Std</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SVM</strong></td>
+                            <td class="metric-high">100.00%</td>
+                            <td class="metric-high">100.00%</td>
+                            <td class="metric-high">100.00%</td>
+                            <td class="metric-high">100.00%</td>
+                            <td class="metric-high">100.00%</td>
+                            <td>99.73%</td>
+                            <td>0.34%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MLP</strong></td>
+                            <td class="metric-high">99.45%</td>
+                            <td class="metric-high">99.46%</td>
+                            <td class="metric-high">99.45%</td>
+                            <td class="metric-high">99.45%</td>
+                            <td class="metric-high">99.99%</td>
+                            <td>99.31%</td>
+                            <td>0.62%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stacking Ensemble</strong></td>
+                            <td class="metric-high">98.90%</td>
+                            <td class="metric-high">98.90%</td>
+                            <td class="metric-high">98.90%</td>
+                            <td class="metric-high">98.90%</td>
+                            <td class="metric-high">99.99%</td>
+                            <td>99.31%</td>
+                            <td>0.62%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Random Forest</strong></td>
+                            <td class="metric-high">93.41%</td>
+                            <td class="metric-high">94.03%</td>
+                            <td class="metric-high">93.41%</td>
+                            <td class="metric-high">93.09%</td>
+                            <td class="metric-high">99.99%</td>
+                            <td>97.66%</td>
+                            <td>0.83%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KNN</strong></td>
+                            <td class="metric-high">93.41%</td>
+                            <td class="metric-high">95.18%</td>
+                            <td class="metric-high">93.41%</td>
+                            <td class="metric-high">92.91%</td>
+                            <td class="metric-high">99.50%</td>
+                            <td>92.86%</td>
+                            <td>1.25%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gradient Boosting</strong></td>
+                            <td class="metric-medium">91.76%</td>
+                            <td class="metric-medium">91.99%</td>
+                            <td class="metric-medium">91.76%</td>
+                            <td class="metric-medium">91.54%</td>
+                            <td class="metric-high">99.21%</td>
+                            <td>95.60%</td>
+                            <td>0.70%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="two-column">
+                <div class="card">
+                    <h3>Random Forest</h3>
+                    <p><strong>Type:</strong> Ensemble (Bagging)</p>
+                    <p><strong>Description:</strong> An ensemble of decision trees using bootstrap aggregating (bagging). Each tree is trained on a random subset of features.</p>
+
+                    <div class="formula">
+                        <strong>Key Parameters:</strong><br>
+                        n_estimators = 100<br>
+                        max_depth = 10<br>
+                        random_state = 42
+                    </div>
+
+                    <h4 style="margin-top: 15px;">How it works:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Create bootstrap samples from training data</li>
+                        <li>Train decision trees on each sample</li>
+                        <li>Each tree makes a prediction</li>
+                        <li>Final prediction = majority vote</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>Support Vector Machine (SVM)</h3>
+                    <p><strong>Type:</strong> Kernel-based</p>
+                    <p><strong>Description:</strong> Finds the optimal hyperplane that maximizes the margin between different classes in feature space.</p>
+
+                    <div class="formula">
+                        <strong>Key Parameters:</strong><br>
+                        kernel = 'rbf'<br>
+                        probability = True<br>
+                        random_state = 42
+                    </div>
+
+                    <h4 style="margin-top: 15px;">How it works:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Map data to higher-dimensional space</li>
+                        <li>Find optimal separating hyperplane</li>
+                        <li>Use kernel functions for non-linear separation</li>
+                        <li>RBF kernel handles complex boundaries</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="card">
+                    <h3>Gradient Boosting</h3>
+                    <p><strong>Type:</strong> Ensemble (Boosting)</p>
+                    <p><strong>Description:</strong> Sequential ensemble method that builds trees to correct errors of previous trees.</p>
+
+                    <div class="formula">
+                        <strong>Key Parameters:</strong><br>
+                        learning_rate = 0.1<br>
+                        n_estimators = 100<br>
+                        max_depth = 3
+                    </div>
+
+                    <h4 style="margin-top: 15px;">How it works:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Initialize with simple model</li>
+                        <li>Calculate residuals (errors)</li>
+                        <li>Fit new tree to residuals</li>
+                        <li>Update model: F(x) = F(x-1) + η * h(x)</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>K-Nearest Neighbors (KNN)</h3>
+                    <p><strong>Type:</strong> Instance-based</p>
+                    <p><strong>Description:</strong> Classifies samples based on the majority class of their k nearest neighbors in feature space.</p>
+
+                    <div class="formula">
+                        <strong>Key Parameters:</strong><br>
+                        n_neighbors = 5<br>
+                        metric = 'minkowski'<br>
+                        weights = 'distance'
+                    </div>
+
+                    <h4 style="margin-top: 15px;">How it works:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Calculate distance to all training points</li>
+                        <li>Find k nearest neighbors</li>
+                        <li>Vote on class labels</li>
+                        <li>Assign majority class</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="card">
+                    <h3>Multi-Layer Perceptron (MLP)</h3>
+                    <p><strong>Type:</strong> Neural Network</p>
+                    <p><strong>Description:</strong> A feedforward neural network with multiple hidden layers that learns non-linear relationships.</p>
+
+                    <div class="formula">
+                        <strong>Key Parameters:</strong><br>
+                        hidden_layer_sizes = (100, 50)<br>
+                        activation = 'relu'<br>
+                        max_iter = 1000
+                    </div>
+
+                    <h4 style="margin-top: 15px;">How it works:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Input → Hidden layers → Output</li>
+                        <li>Each neuron applies activation function</li>
+                        <li>Backpropagation for weight updates</li>
+                        <li>Softmax for multi-class output</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>Stacking Ensemble</h3>
+                    <p><strong>Type:</strong> Meta-Ensemble</p>
+                    <p><strong>Description:</strong> Two-level ensemble where base learners' predictions become features for a meta-learner.</p>
+
+                    <div class="formula">
+                        <strong>Base Models:</strong><br>
+                        - LASSO (LogisticRegressionCV)<br>
+                        - ElasticNet<br>
+                        - Random Forest<br>
+                        - SVM<br><br>
+                        <strong>Meta-Learner:</strong><br>
+                        - Logistic Regression
+                    </div>
+
+                    <h4 style="margin-top: 15px;">How it works:</h4>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Train base models with cross-validation</li>
+                        <li>Collect out-of-fold predictions</li>
+                        <li>Create meta-features</li>
+                        <li>Train meta-learner on meta-features</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="deeplearning">
+            <h2>Deep Learning Models</h2>
+
+            <div class="card">
+                <h3>Deep Learning Architecture Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Architecture</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1D CNN</strong></td>
+                            <td>Conv1D + BatchNorm + MaxPooling</td>
+                            <td>Local gene expression patterns</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LSTM</strong></td>
+                            <td>LSTM layers + Dense</td>
+                            <td>Sequential gene interactions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transformer</strong></td>
+                            <td>Multi-Head Attention + FFN</td>
+                            <td>Biomarker importance learning</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Autoencoder</strong></td>
+                            <td>Encoder-Decoder</td>
+                            <td>Feature extraction + Anomaly detection</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hybrid Ensemble</strong></td>
+                            <td>DL + Traditional ML</td>
+                            <td>Maximum performance</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>1D CNN Architecture</h3>
+                <div class="dl-architecture">
+# 1D CNN Model Architecture
+Input: (331, 1) - Gene expression features
+
+Conv Block 1:
+  Conv1D(filters=64, kernel_size=3, padding='same', activation='relu')
+  BatchNormalization()
+  Conv1D(filters=64, kernel_size=3, padding='same', activation='relu')
+  BatchNormalization()
+  MaxPooling1D(pool_size=2)
+  Dropout(0.3)
+
+Conv Block 2:
+  Conv1D(filters=128, kernel_size=3, padding='same', activation='relu')
+  BatchNormalization()
+  Conv1D(filters=128, kernel_size=3, padding='same', activation='relu')
+  BatchNormalization()
+  MaxPooling1D(pool_size=2)
+  Dropout(0.3)
+
+Conv Block 3:
+  Conv1D(filters=256, kernel_size=3, padding='same', activation='relu')
+  BatchNormalization()
+  GlobalAveragePooling1D()
+  Dropout(0.3)
+
+Dense Layers:
+  Dense(128, activation='relu', kernel_regularizer=l2(0.01))
+  Dropout(0.3)
+  Dense(64, activation='relu', kernel_regularizer=l2(0.01))
+  Dropout(0.3)
+
+Output:
+  Dense(n_classes, activation='softmax')
+                </div>
+
+                <h4 style="margin-top: 20px;">Training Parameters</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Optimizer</td>
+                            <td>Adam</td>
+                        </tr>
+                        <tr>
+                            <td>Learning Rate</td>
+                            <td>0.001</td>
+                        </tr>
+                        <tr>
+                            <td>Loss Function</td>
+                            <td>categorical_crossentropy</td>
+                        </tr>
+                        <tr>
+                            <td>Batch Size</td>
+                            <td>32</td>
+                        </tr>
+                        <tr>
+                            <td>Early Stopping</td>
+                            <td>patience=15</td>
+                        </tr>
+                        <tr>
+                            <td>Reduce LR</td>
+                            <td>patience=5, factor=0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="two-column">
+                <div class="card">
+                    <h3>LSTM Model</h3>
+                    <p><strong>Purpose:</strong> Captures sequential patterns in gene expression data</p>
+
+                    <div class="dl-architecture">
+# LSTM Architecture
+Input: (331, 1)
+
+LSTM(64, return_sequences=True, dropout=0.3)
+LSTM(32, return_sequences=False, dropout=0.3)
+
+Dense(64, activation='relu')
+Dropout(0.3)
+Dense(32, activation='relu')
+
+Output: Dense(n_classes, activation='softmax')
+                    </div>
+
+                    <p style="margin-top: 15px;"><strong>Key Concept:</strong> Long Short-Term Memory networks can learn long-term dependencies in sequential data, useful for understanding gene expression cascades.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Transformer Model</h3>
+                    <p><strong>Purpose:</strong> Uses attention mechanism to identify important biomarkers</p>
+
+                    <div class="dl-architecture">
+# Transformer Architecture
+Input: (331, 1)
+
+MultiHeadAttention(num_heads=4, key_dim=64)
+  - Self-attention mechanism
+  - Captures gene relationships
+
+Dense(64, activation='relu')  # Feed Forward
+Dense(64)                      # Projection back
+LayerNormalization()
+
+GlobalAveragePooling1D()
+Dense(128, activation='relu')
+Dense(64, activation='relu')
+
+Output: Dense(n_classes, activation='softmax')
+                    </div>
+
+                    <p style="margin-top: 15px;"><strong>Key Concept:</strong> Attention weights can be visualized to show which genes are most important for classification.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Autoencoder for Feature Extraction</h3>
+                <p><strong>Purpose:</strong> Learn compressed representations of gene expression data for dimensionality reduction and anomaly detection</p>
+
+                <div class="dl-architecture">
+# Autoencoder Architecture
+Input: (331, 1)
+
+Encoder:
+  Conv1D(64, 3, activation='relu', padding='same')
+  MaxPooling1D(2)
+  Conv1D(32, 3, activation='relu', padding='same')
+  GlobalAveragePooling1D()
+  Dense(32, activation='relu')  # Bottleneck
+
+Decoder:
+  Dense(32, activation='relu')
+  Dense(...)
+  Reshape(...)
+  Conv1D(32, 3, activation='relu', padding='same')
+  UpSampling1D(2)
+  Conv1D(1, 3, activation='sigmoid', padding='same')
+
+Loss: Mean Squared Error
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Hybrid Ensemble (Deep Learning + Traditional ML)</h3>
+                <p>Combines the strengths of both deep learning and traditional machine learning approaches:</p>
+
+                <ol style="margin-left: 20px; margin-top: 15px;">
+                    <li><strong>Deep Learning Models:</strong> 1D CNN, LSTM, Transformer</li>
+                    <li><strong>Traditional Models:</strong> Random Forest, SVM, Gradient Boosting</li>
+                    <li><strong>Weighted Voting:</strong> Based on cross-validation performance</li>
+                    <li><strong>Probability Averaging:</strong> Mean of all model probabilities</li>
+                </ol>
+
+                <div class="formula" style="margin-top: 20px;">
+                    <strong>Ensemble Prediction:</strong><br>
+                    P(final) = Σ(w_i * P_i) / Σ(w_i)<br><br>
+                    where w_i = CV accuracy of model i
+                </div>
+            </div>
+        </section>
+
+        <section id="concepts">
+            <h2>Key Concepts Explained</h2>
+
+            <div class="two-column">
+                <div class="concept-box">
+                    <h4>Cross-Validation</h4>
+                    <p>A technique to assess how well a model generalizes to independent datasets. The data is split into k folds, and the model is trained k times, each time using k-1 folds for training and 1 fold for validation.</p>
+                </div>
+
+                <div class="concept-box">
+                    <h4>ROC-AUC</h4>
+                    <p>Receiver Operating Characteristic - Area Under Curve. Measures the model's ability to distinguish between classes. A value of 1.0 means perfect classification, 0.5 means random guessing.</p>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="concept-box">
+                    <h4>LASSO Regression</h4>
+                    <p>Least Absolute Shrinkage and Selection Operator. Adds L1 regularization that can shrink some coefficients to exactly zero, performing feature selection automatically.</p>
+                </div>
+
+                <div class="concept-box">
+                    <h4>Regularization</h4>
+                    <p>Techniques to prevent overfitting by adding a penalty term to the loss function. L1 (LASSO) promotes sparsity, L2 (Ridge) promotes small weights.</p>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="concept-box">
+                    <h4>Batch Normalization</h4>
+                    <p>Normalizes the inputs of each layer to have zero mean and unit variance. This stabilizes training and allows for higher learning rates.</p>
+                </div>
+
+                <div class="concept-box">
+                    <h4>Dropout</h4>
+                    <p>Randomly sets a fraction of input units to 0 during training. This prevents co-adaptation of neurons and acts as regularization.</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h3>Evaluation Metrics</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Formula</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Accuracy</strong></td>
+                            <td>(TP + TN) / (TP + TN + FP + FN)</td>
+                            <td>Overall correctness of predictions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Precision</strong></td>
+                            <td>TP / (TP + FP)</td>
+                            <td>Of predicted positives, how many are correct</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Recall</strong></td>
+                            <td>TP / (TP + FN)</td>
+                            <td>Of actual positives, how many are predicted</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F1-Score</strong></td>
+                            <td>2 × (Precision × Recall) / (Precision + Recall)</td>
+                            <td>Harmonic mean of precision and recall</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ROC-AUC</strong></td>
+                            <td>Area under ROC curve</td>
+                            <td>Model's ability to rank positive samples higher</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Data Splitting</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="number">80%</div>
+                        <div class="label">Training Set</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">20%</div>
+                        <div class="label">Test Set</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">5</div>
+                        <div class="label">CV Folds</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">42</div>
+                        <div class="label">Random Seed</div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Note:</strong> Stratified splitting ensures that each class is represented in similar proportions in both training and test sets.</p>
+            </div>
+        </section>
+
+        <section id="parameters">
+            <h2>All Model Parameters</h2>
+
+            <div class="card">
+                <h3>Preprocessing Parameters</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Step</th>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Scaling</td>
+                            <td>Method</td>
+                            <td>StandardScaler (Z-score)</td>
+                        </tr>
+                        <tr>
+                            <td>Scaling</td>
+                            <td>Mean</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Scaling</td>
+                            <td>Std</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>Train/Test Split</td>
+                            <td>test_size</td>
+                            <td>0.2 (20%)</td>
+                        </tr>
+                        <tr>
+                            <td>Train/Test Split</td>
+                            <td>random_state</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td>Cross-Validation</td>
+                            <td>folds</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>Cross-Validation</td>
+                            <td>strategy</td>
+                            <td>StratifiedKFold</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Traditional ML Model Parameters</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3">Random Forest</td>
+                            <td>n_estimators</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>max_depth</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>random_state</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">SVM</td>
+                            <td>kernel</td>
+                            <td>rbf</td>
+                        </tr>
+                        <tr>
+                            <td>probability</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>random_state</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">LASSO</td>
+                            <td>Cs</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>penalty</td>
+                            <td>l1</td>
+                        </tr>
+                        <tr>
+                            <td>solver</td>
+                            <td>saga</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">MLP</td>
+                            <td>hidden_layer_sizes</td>
+                            <td>(100, 50)</td>
+                        </tr>
+                        <tr>
+                            <td>activation</td>
+                            <td>relu</td>
+                        </tr>
+                        <tr>
+                            <td>max_iter</td>
+                            <td>1000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Deep Learning Parameters</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>optimizer</td>
+                            <td>Adam</td>
+                            <td>Adaptive moment estimation</td>
+                        </tr>
+                        <tr>
+                            <td>learning_rate</td>
+                            <td>0.001</td>
+                            <td>Initial learning rate</td>
+                        </tr>
+                        <tr>
+                            <td>loss</td>
+                            <td>categorical_crossentropy</td>
+                            <td>Multi-class classification</td>
+                        </tr>
+                        <tr>
+                            <td>batch_size</td>
+                            <td>32</td>
+                            <td>Samples per batch</td>
+                        </tr>
+                        <tr>
+                            <td>epochs</td>
+                            <td>100</td>
+                            <td>Maximum epochs</td>
+                        </tr>
+                        <tr>
+                            <td>early_stopping</td>
+                            <td>patience=15</td>
+                            <td>Stop if no improvement</td>
+                        </tr>
+                        <tr>
+                            <td>reduce_lr</td>
+                            <td>patience=5, factor=0.5</td>
+                            <td>Reduce LR on plateau</td>
+                        </tr>
+                        <tr>
+                            <td>dropout</td>
+                            <td>0.3</td>
+                            <td>Regularization rate</td>
+                        </tr>
+                        <tr>
+                            <td>L2 regularization</td>
+                            <td>0.01</td>
+                            <td>Weight decay</td>
+                        </tr>
+                        <tr>
+                            <td>CNN filters</td>
+                            <td>64, 128, 256</td>
+                            <td>Increasing filter sizes</td>
+                        </tr>
+                        <tr>
+                            <td>LSTM units</td>
+                            <td>64, 32</td>
+                            <td>Sequential reduction</td>
+                        </tr>
+                        <tr>
+                            <td>Attention heads</td>
+                            <td>4</td>
+                            <td>Multi-head attention</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Project Configuration</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Setting</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Project Directory</td>
+                            <td>/home/kanishka/Downloads/thyroid_project2.0</td>
+                        </tr>
+                        <tr>
+                            <td>Organism</td>
+                            <td>Homo sapiens</td>
+                        </tr>
+                        <tr>
+                            <td>Data Sources</td>
+                            <td>GEO + TCGA</td>
+                        </tr>
+                        <tr>
+                            <td>Python Version</td>
+                            <td>3.12</td>
+                        </tr>
+                        <tr>
+                            <td>Key Libraries</td>
+                            <td>pandas, numpy, scikit-learn, tensorflow, keras</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            <h2>Project Summary</h2>
+            <p>This comprehensive thyroid cancer classification project achieves:</p>
+            <div class="stats-grid" style="margin-top: 20px;">
+                <div class="stat-box">
+                    <div class="number">99.7%</div>
+                    <div class="label">Best CV Accuracy</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">100%</div>
+                    <div class="label">Test Accuracy (SVM)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">82</div>
+                    <div class="label">Biomarker Genes</div>
+                </div>
+            </div>
+            <p style="margin-top: 30px; opacity: 0.7;">
+                Generated: February 2026 | Author: Kanishka P M, MSc Bioinformatics
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

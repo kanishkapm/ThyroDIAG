@@ -1,0 +1,44 @@
+[
+  {
+    "Model": "LASSO",
+    "Test Accuracy": 1.0,
+    "CV Mean": 1.0,
+    "CV Std": 0.0
+  },
+  {
+    "Model": "ElasticNet",
+    "Test Accuracy": 1.0,
+    "CV Mean": 1.0,
+    "CV Std": 0.0
+  },
+  {
+    "Model": "Random Forest",
+    "Test Accuracy": 1.0,
+    "CV Mean": 1.0,
+    "CV Std": 0.0
+  },
+  {
+    "Model": "SVM",
+    "Test Accuracy": 1.0,
+    "CV Mean": 1.0,
+    "CV Std": 0.0
+  },
+  {
+    "Model": "KNN",
+    "Test Accuracy": 1.0,
+    "CV Mean": 1.0,
+    "CV Std": 0.0
+  },
+  {
+    "Model": "ENSEMBLE \u2605",
+    "Test Accuracy": 1.0,
+    "CV Mean": 1.0,
+    "CV Std": 0.0
+  },
+  {
+    "Model": "Gradient Boosting",
+    "Test Accuracy": 0.9861111111111112,
+    "CV Mean": 1.0,
+    "CV Std": 0.0
+  }
+]

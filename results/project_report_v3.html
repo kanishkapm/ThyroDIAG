@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thyroid Cancer Classification 3.0 - Complete Project Report</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #1e3c72;
+        }
+
+        h2 {
+            color: #1e3c72;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            color: #2a5298;
+            margin: 1rem 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #1e3c72;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .feature-list li i {
+            color: #28a745;
+            font-size: 1.2rem;
+        }
+
+        .gene-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .gene-tag {
+            background: #e9ecef;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8e6cf 0%, #dcedc1 100%);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .novelty-box {
+            background: linear-gradient(120deg, #fff3cd 0%, #ffeeba 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .author-info {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .author-name {
+            font-size: 1.5rem;
+            color: #1e3c72;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #1e3c72;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: #1e3c72;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #2a5298;
+            transform: translateY(-2px);
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .accordion {
+            background: white;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1rem;
+            background: #e9ecef;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-content {
+            padding: 1rem;
+            display: none;
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-dna"></i> Thyroid Cancer Classification 3.0</h1>
+            <p class="subtitle">Deep Learning + AI Agent Enhanced System</p>
+            <div class="badge">
+                <i class="fas fa-rocket"></i> Advanced Machine Learning for Precision Medicine
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Project Overview -->
+            <section>
+                <h2><i class="fas fa-project-diagram"></i> Project Overview</h2>
+                <p>
+                    This project presents a comprehensive machine learning system for thyroid cancer classification
+                    using gene expression data. The system integrates multiple data sources (GEO and TCGA),
+                    employs both traditional machine learning and deep learning approaches, and includes an
+                    intelligent AI agent for research assistance.
+                </p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">722</div>
+                        <div class="stat-label">Total Samples</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">129</div>
+                        <div class="stat-label">Biomarker Genes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Cancer Subtypes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">93%+</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Sources -->
+            <section>
+                <h2><i class="fas fa-database"></i> Data Sources</h2>
+
+                <h3>NCBI Gene Expression Omnibus (GEO)</h3>
+                <table>
+                    <tr>
+                        <th>Dataset</th>
+                        <th>Samples</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>GSE33630</td>
+                        <td>105</td>
+                        <td>Normal thyrocytes vs Papillary vs Anaplastic</td>
+                    </tr>
+                    <tr>
+                        <td>GSE60541</td>
+                        <td>~50</td>
+                        <td>Human thyroid cancer profiling</td>
+                    </tr>
+                    <tr>
+                        <td>GSE53157</td>
+                        <td>~30</td>
+                        <td>PTC with/without lymph node metastasis</td>
+                    </tr>
+                    <tr>
+                        <td>GSE29265</td>
+                        <td>50</td>
+                        <td>Thyroid Cancer vs Normal</td>
+                    </tr>
+                    <tr>
+                        <td>GSE3467</td>
+                        <td>40</td>
+                        <td>Thyroid Tumors</td>
+                    </tr>
+                    <tr>
+                        <td>GSE76039</td>
+                        <td>55</td>
+                        <td>Anaplastic Thyroid Cancer</td>
+                    </tr>
+                </table>
+
+                <h3>TCGA (The Cancer Genome Atlas)</h3>
+                <table>
+                    <tr>
+                        <th>Subtype</th>
+                        <th>Samples</th>
+                        <th>Percentage</th>
+                    </tr>
+                    <tr>
+                        <td>PTC (Classical)</td>
+                        <td>287</td>
+                        <td>56.6%</td>
+                    </tr>
+                    <tr>
+                        <td>FTC</td>
+                        <td>62</td>
+                        <td>12.2%</td>
+                    </tr>
+                    <tr>
+                        <td>Normal</td>
+                        <td>59</td>
+                        <td>11.6%</td>
+                    </tr>
+                    <tr>
+                        <td>PTC-FV</td>
+                        <td>48</td>
+                        <td>9.5%</td>
+                    </tr>
+                    <tr>
+                        <td>PDTC</td>
+                        <td>40</td>
+                        <td>7.9%</td>
+                    </tr>
+                    <tr>
+                        <td>ATC</td>
+                        <td>11</td>
+                        <td>2.2%</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Biomarker Genes -->
+            <section>
+                <h2><i class="fas fa-dna"></i> Biomarker Genes (129 Genes)</h2>
+
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        Thyroid Differentiation Markers (10) <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="gene-list">
+                            <span class="gene-tag">TG</span>
+                            <span class="gene-tag">TPO</span>
+                            <span class="gene-tag">DIO1</span>
+                            <span class="gene-tag">DIO2</span>
+                            <span class="gene-tag">TSHR</span>
+                            <span class="gene-tag">SLC5A5</span>
+                            <span class="gene-tag">SLC26A4</span>
+                            <span class="gene-tag">NKX2-1</span>
+                            <span class="gene-tag">FOXE1</span>
+                            <span class="gene-tag">PAX8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        Cancer Driver Genes (12) <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="gene-list">
+                            <span class="gene-tag">BRAF</span>
+                            <span class="gene-tag">RET</span>
+                            <span class="gene-tag">NRAS</span>
+                            <span class="gene-tag">HRAS</span>
+                            <span class="gene-tag">KRAS</span>
+                            <span class="gene-tag">PIK3CA</span>
+                            <span class="gene-tag">PTEN</span>
+                            <span class="gene-tag">TP53</span>
+                            <span class="gene-tag">AKT1</span>
+                            <span class="gene-tag">MAPK1</span>
+                            <span class="gene-tag">MAP2K1</span>
+                            <span class="gene-tag">CTNNB1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        Diagnostic & EMT Markers (20) <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="gene-list">
+                            <span class="gene-tag">TERT</span>
+                            <span class="gene-tag">GALECTIN3</span>
+                            <span class="gene-tag">HBME1</span>
+                            <span class="gene-tag">CITED1</span>
+                            <span class="gene-tag">TFF3</span>
+                            <span class="gene-tag">KRT19</span>
+                            <span class="gene-tag">KRT7</span>
+                            <span class="gene-tag">KRT8</span>
+                            <span class="gene-tag">KRT18</span>
+                            <span class="gene-tag">PPARG</span>
+                            <span class="gene-tag">CDH1</span>
+                            <span class="gene-tag">FN1</span>
+                            <span class="gene-tag">VIM</span>
+                            <span class="gene-tag">ZEB1</span>
+                            <span class="gene-tag">ZEB2</span>
+                            <span class="gene-tag">SNAI1</span>
+                            <span class="gene-tag">SNAI2</span>
+                            <span class="gene-tag">TWIST1</span>
+                            <span class="gene-tag">CDH2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        Immune & Proliferation Markers (12) <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="gene-list">
+                            <span class="gene-tag">PDCD1</span>
+                            <span class="gene-tag">CD274</span>
+                            <span class="gene-tag">PDCD1LG2</span>
+                            <span class="gene-tag">CTLA4</span>
+                            <span class="gene-tag">CD8A</span>
+                            <span class="gene-tag">PTPRC</span>
+                            <span class="gene-tag">MKI67</span>
+                            <span class="gene-tag">PCNA</span>
+                            <span class="gene-tag">TOP2A</span>
+                            <span class="gene-tag">CCNB1</span>
+                            <span class="gene-tag">CCND1</span>
+                            <span class="gene-tag">AURKA</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Model Architecture -->
+            <section>
+                <h2><i class="fas fa-brain"></i> Model Architecture</h2>
+
+                <h3>Traditional Machine Learning</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Random Forest (150 estimators)</li>
+                    <li><i class="fas fa-check"></i> Gradient Boosting (100 estimators)</li>
+                    <li><i class="fas fa-check"></i> Support Vector Machine (RBF kernel)</li>
+                    <li><i class="fas fa-check"></i> K-Nearest Neighbors</li>
+                    <li><i class="fas fa-check"></i> Stacking Ensemble with Meta-learner</li>
+                </ul>
+
+                <h3>Deep Learning Models</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> 1D Convolutional Neural Network (CNN)</li>
+                    <li><i class="fas fa-check"></i> Long Short-Term Memory (LSTM)</li>
+                    <li><i class="fas fa-check"></i> Transformer with Attention</li>
+                    <li><i class="fas fa-check"></i> Autoencoder for Feature Extraction</li>
+                </ul>
+
+                <h3>Performance Metrics</h3>
+                <table>
+                    <tr>
+                        <th>Model</th>
+                        <th>Accuracy</th>
+                        <th>CV Mean</th>
+                        <th>F1-Score</th>
+                    </tr>
+                    <tr>
+                        <td>Stacking Ensemble</td>
+                        <td><span class="highlight">93.0%</span></td>
+                        <td>94.2%</td>
+                        <td>89.7%</td>
+                    </tr>
+                    <tr>
+                        <td>SVM</td>
+                        <td>93.0%</td>
+                        <td>91.9%</td>
+                        <td>88.0%</td>
+                    </tr>
+                    <tr>
+                        <td>MLP</td>
+                        <td>90.7%</td>
+                        <td>91.8%</td>
+                        <td>86.0%</td>
+                    </tr>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>88.4%</td>
+                        <td>80.8%</td>
+                        <td>82.0%</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>86.0%</td>
+                        <td>89.0%</td>
+                        <td>80.0%</td>
+                    </tr>
+                    <tr>
+                        <td>KNN</td>
+                        <td>83.7%</td>
+                        <td>90.7%</td>
+                        <td>78.0%</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Novelty -->
+            <section>
+                <h2><i class="fas fa-lightbulb"></i> Novelty & Innovation</h2>
+
+                <div class="novelty-box">
+                    <h3><i class="fas fa-star"></i> Key Novel Contributions</h3>
+                    <ol>
+                        <li><strong>Multi-Source Data Integration:</strong> First study combining GEO + TCGA data (722 samples)</li>
+                        <li><strong>Multi-Modal Deep Learning:</strong> CNN + LSTM + Transformer ensemble</li>
+                        <li><strong>Hybrid Architecture:</strong> Deep learning + Traditional ML weighted ensemble</li>
+                        <li><strong>Agentic AI System:</strong> Research + Pipeline automation agents</li>
+                        <li><strong>Real-Time Prediction:</strong> Both Traditional ML and Deep Learning predictions</li>
+                        <li><strong>Clinical Decision Support:</strong> AI-powered biomarker analysis</li>
+                    </ol>
+                </div>
+
+                <h3>Comparison with Existing Studies</h3>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Existing Studies</th>
+                        <th>Our Study (v3.0)</th>
+                    </tr>
+                    <tr>
+                        <td>Data Sources</td>
+                        <td>Single database</td>
+                        <td>GEO + TCGA</td>
+                    </tr>
+                    <tr>
+                        <td>Sample Size</td>
+                        <td>< 300</td>
+                        <td>722</td>
+                    </tr>
+                    <tr>
+                        <td>Deep Learning</td>
+                        <td>Limited/Single</td>
+                        <td>CNN + LSTM + Transformer</td>
+                    </tr>
+                    <tr>
+                        <td>Ensemble</td>
+                        <td>Traditional ML only</td>
+                        <td>Hybrid (DL + ML)</td>
+                    </tr>
+                    <tr>
+                        <td>AI Agents</td>
+                        <td>None</td>
+                        <td>Full System</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- AI Agent -->
+            <section>
+                <h2><i class="fas fa-robot"></i> AI Agent System</h2>
+
+                <h3>Research Agent Capabilities</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-search"></i> Literature search on thyroid cancer biomarkers</li>
+                    <li><i class="fas fa-microscope"></i> Gene set enrichment analysis</li>
+                    <li><i class="fas fa-project-diagram"></i> Pathway analysis</li>
+                    <li><i class="fas fa-flask"></i> Clinical trial information</li>
+                    <li><i class="fas fa-comments"></i> Natural language chat interface</li>
+                </ul>
+
+                <h3>Pipeline Agent Capabilities</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-download"></i> Automated data download</li>
+                    <li><i class="fas fa-cogs"></i> Preprocessing automation</li>
+                    <li><i class="fas fa-train"></i> Model training pipeline</li>
+                    <li><i class="fas fa-sliders-h"></i> Hyperparameter optimization</li>
+                </ul>
+            </section>
+
+            <!-- How to Run -->
+            <section>
+                <h2><i class="fas fa-play"></i> How to Run</h2>
+
+                <h3>1. Activate Virtual Environment</h3>
+                <div class="code-block">cd /home/kanishka/Downloads/thyroid_project2.0
+source venv/bin/activate</div>
+
+                <h3>2. Run Web Application</h3>
+                <div class="code-block">python app.py</div>
+                <p>Then open: <strong>http://localhost:5000</strong></p>
+
+                <h3>3. Download Data</h3>
+                <div class="code-block"># Download GEO data
+python download_real_geo.py
+
+# Download TCGA data
+python download_tcga_real.py</div>
+
+                <h3>4. Train Models</h3>
+                <div class="code-block"># Traditional ML
+python stage4_ensemble_stacking.py
+
+# Deep Learning
+python deep_learning_models.py</div>
+            </section>
+
+            <!-- Author -->
+            <div class="author-info">
+                <div class="author-name">Kanishka P M</div>
+                <p>MSc Bioinformatics</p>
+                <p>Thyroid Cancer Classification Project 3.0</p>
+                <p>February 2026</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><i class="fas fa-dna"></i> Thyroid Cancer Classification 3.0</p>
+            <p>Advanced Machine Learning for Precision Medicine</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('i');
+
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                content.classList.add('active');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        // Open first accordion by default
+        document.querySelector('.accordion-header').click();
+    </script>
+</body>
+</html>

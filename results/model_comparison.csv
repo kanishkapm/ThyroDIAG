@@ -1,0 +1,8 @@
+Model,Test Accuracy,CV Mean,CV Std
+LASSO,1.0,1.0,0.0
+ElasticNet,1.0,1.0,0.0
+Random Forest,1.0,1.0,0.0
+SVM,1.0,1.0,0.0
+KNN,1.0,1.0,0.0
+ENSEMBLE ★,1.0,1.0,0.0
+Gradient Boosting,0.9861111111111112,1.0,0.0

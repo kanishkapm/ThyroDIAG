@@ -1,0 +1,748 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+  <HEAD>
+    
+    <style type="text/css">
+      a { text-decoration: none; }
+	.bordergc {background-color: #6699CC;}
+	.bordergd {background-color: #B6C7E5;}
+	.borderge {background-color: #EEF3FB;}
+	.bordergf {background-color: #FFFFFF;}
+	.bordergg {background-color: #CCCCCC;}
+      .small8b { font-size:8pt;
+                font-family: ariel,helvetica,sans-serif;
+                color:#6633cc;
+              }
+      .small8db { font-size:8pt;
+                font-family: ariel,helvetica,sans-serif;
+                color:#4411aa;
+              }
+
+    </style>
+    <META http-equiv="Content-Type"
+      content="text/html; charset=UTF-8">
+    <META name="keywords"
+      CONTENT="NCBI GEO Gene Expression Omnibus microarray oligonucleotide array SAGE">
+    <META name="description"
+      content="NCBI's Gene Expression Omnibus (GEO) is a public archive and resource for gene expression data.">
+
+<meta name="ncbi_app" content="geo">
+<meta name="ncbi_pdid" content="full">
+<meta name="ncbi_phid" content="0C42463D992B83B10000000000000001">
+<meta name="ncbi_sessionid" content="0C42463D992B83B1_0000SID">
+
+    <TITLE>
+    GEO Accession viewer
+    </TITLE>
+    <link rel="stylesheet"
+      href="/corehtml/ncbi.css">
+    <!-- GEO_SCRIPT -->
+
+<SCRIPT LANGUAGE="JavaScript1.2"
+SRC="/coreweb/javascript/imagemouseover.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript1.2"
+SRC="/coreweb/javascript/show_message.js"></SCRIPT>
+
+<script type="text/javascript" src="/corehtml/jsutils/utils.1.js"></script>
+
+<script type="text/javascript" src="/corehtml/jsutils/remote_data_provider.1.js"></script>
+
+<SCRIPT LANGUAGE="JavaScript1.2"
+SRC="/geo/js/help_def_messages.js"></SCRIPT>
+
+<script type="text/javascript">
+    window.onload = function () {
+        jQuery.getScript("/core/alerts/alerts.js", function () {
+            galert(['#galerts_table','body > *:nth-child(1)'])
+        });
+    }
+</script>
+
+
+
+<LINK  rel = STYLESHEET href = "../info/geo_style.css" Type  = "text/css" >
+<link rel="stylesheet" type="text/css" href="acc.css" />
+  <script language="Javascript">
+
+  function OnFormFieldChange()
+  {
+    var view = document.getElementById("view");
+
+    if(document.getElementById("ViewOptions").form.value == 'html')
+    {
+        view.remove(3);
+        view.remove(2);
+    }
+    else
+    {
+        var NewOption = document.createElement("OPTION");
+
+        NewOption.text = "Full";
+        NewOption.value = "full";
+
+        try
+        {
+            view.add(NewOption, null);
+        }
+        catch(ex)
+        {
+            view.add(NewOption);
+        }
+
+        NewOption = document.createElement("OPTION");
+
+        NewOption.text = "Data";
+        NewOption.value = "data";
+
+        try
+        {
+            view.add(NewOption, null);
+        }
+        catch(ex)
+        {
+            view.add(NewOption);
+        }
+    }
+  }
+
+  function SubmitViewOptionsForm()
+  {
+	var form = document.forms.ViewOptions;
+    if(form.form.value == 'html')
+    {
+		form.form.setAttribute('disabled','disabled');
+		if (form.view.value == 'quick') {
+			form.view.setAttribute('disabled','disabled');
+		}
+		if (form.targ.value == 'self') {
+			form.targ.setAttribute('disabled','disabled');
+		}
+        var token = document.getElementById("token_input");
+        if (token) {
+            form.token.value = token.value;
+        } else {
+            form.token.setAttribute('disabled','disabled');
+        }
+        form.submit();
+    }
+    else
+    {
+        window.open("acc.cgi?acc=" + form.acc.value + "&targ=" + form.targ.value +
+                  "&form=" + form.form.value + "&view=" + form.view.value, "_self");
+    }
+
+    return false;
+  }
+  
+  function ViewOptionsFormKeyDown(event)
+  {
+	if (event == undefined)
+	{    
+		event = window.event;
+	}
+	if (event.keyCode == 13)
+	{
+		SubmitViewOptionsForm();
+		return false;
+	}
+  };
+
+  function OpenFTP(url)
+  {
+    window.open(url.replace('ftp://', 'https://'), '_blank');
+  }
+
+  function OpenLink(url, where)
+  {
+    window.open(url, where);
+  }
+
+  utils.addEvent(window, "load", OnFormFieldChange)
+  </script>
+
+</head>
+<body background="/coreweb/template1/pix/bg_main3.gif" topmargin="20" marginheight="20">
+
+
+<script type="text/javascript" src="/core/jig/1.15.10/js/jig.min.js"></script>
+<script type="text/javascript" src="/corehtml/pmc/granthub/v1/granthubsearch.min.js"></script>
+<script type="text/javascript" src="/geo/js/dd_menu.js"></script>
+	<table width="740" border="0" cellspacing="0" cellpadding="0" align="center" >
+			<tr>
+				<td>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+						<tr>
+							<td><a href="/"><img src="/geo/img/ncbi_logo.gif" alt="NCBI Logo" width="145" height="66" border="0"></a></td>
+							<td width="100%" align="center" valign="middle" nowrap background="/coreweb/template1/pix/top_bg_white.gif"><img src="/coreweb/template1/pix/pixel.gif" width="550" height="1" alt="" border="0"><br>
+								<a href="/geo/"><img src="/geo/img/geo_main.gif" alt="GEO Logo" border="0"></a>
+							</td>
+							<td align="right" background="/coreweb/template1/pix/top_bg_white.gif"><img src="/coreweb/template1/pix/top_right.gif" alt="" width="5" height="66" border="0"></td>
+						</tr>
+					</table>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+						<tr>
+							<td><img src="/coreweb/template1/pix/top2_left.gif" width="601" height="2" alt="" border="0"></td>
+							<td width="100%" background="/coreweb/template1/pix/top2_mid_bg.gif"><img src="/coreweb/template1/pix/pixel.gif" width="1" height="1" alt="" border="0"></td>
+							<td align="right"><img src="/coreweb/template1/pix/top2_right.gif" alt="" width="14" height="2" border="0"></td>
+						</tr>
+					</table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" id="galerts_table"/>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+						<tr>
+							<td><img src="/coreweb/template1/pix/top3_ulm_no_a.gif" width="145" height="16" alt="" border="0" usemap="#unlmenu" name="unl_menu_pix"></td>
+							<td background="/coreweb/template1/pix/top3_mainmenu_mid_bg.gif"><img src="/coreweb/template1/pix/top3_mainmenu_left.gif" width="3" height="16" alt="" border="0"></td>
+							<td width="100%" valign="middle" nowrap background="/coreweb/template1/pix/top3_mainmenu_mid_bg.gif">
+
+					<!-- GEO Navigation -->
+			<ul id="geo_nav_bar">
+				<li><a href="#">GEO Publications</a>
+					<ul class="sublist">
+						<li><a href="/geo/info/GEOHandoutFinal.pdf">Handout</a></li>
+                        <li><a href="/pmc/articles/PMC10767856/">NAR 2024 (latest)</a></li>
+						<li><a href="/pmc/articles/PMC99122/">NAR 2002 (original)</a></li>
+						<li><a href="/pmc/?term=10767856,4944384,3531084,3341798,3013736,2686538,2270403,1669752,1619900,1619899,539976,99122">All publications</a></li>
+					</ul>
+				</li>
+				<li><a href="/geo/info/faq.html">FAQ</a></li>
+				<li><a href="/geo/info/MIAME.html" title="Minimum Information About a Microarray Experiment">MIAME</a></li>
+				<li><a href="mailto:geo@ncbi.nlm.nih.gov">Email GEO</a></li>
+			</ul>
+			<!-- END GEO Navigation -->
+
+                    </td>
+                    <td background="/coreweb/template1/pix/top3_mainmenu_mid_bg.gif" align="right"><img src="/coreweb/template1/pix/top3_mainmenu_right.gif" width="5" height="16" alt="" border="0"></td>
+                </tr>
+            </table>
+            
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                <tr>
+                    <td><img src="/coreweb/template1/pix/top4_ulm_left.gif" width="145" height="4" alt="" border="0"></td>
+                    <td width="100%" background="/coreweb/template1/pix/top4_mid_bg.gif"><img src="/coreweb/template1/pix/pixel.gif" width="1" height="1" alt="" border="0"></td>
+                    <td align="right" background="/coreweb/template1/pix/top4_mid_bg.gif"><img src="/coreweb/template1/pix/top4_ulm_right.gif" width="5" height="4" alt="" border="0"></td>
+                </tr>
+            </table>
+    
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                <tr>
+                    <td width=1 background="/coreweb/template1/pix/main_left_bg.gif"><img src="/coreweb/template1/pix/main_left_bg.gif" alt="" width="4" height="3" border="0"></td>
+                    <td width="10000" bgcolor="#F0F8FF">
+                        <table cellpadding="0" cellspacing="0" width="100%"><tr><td><font class="Top_Navigation_text" color="#2F6E87" face="Verdana" size="+1">&nbsp;&nbsp;&nbsp;<a href="/">NCBI</a> &gt; <a href="/geo"><font color="">GEO</font></a> &gt; <a href="acc.cgi"><b>Accession Display</b></a><a href="javascript:RPopUpWindow_Set(geologinbar_location,260,120,'','','#E1EAE6','','#538AA9','MessageBox2');" onmouseout="RPopUpWindow_Stop()"><img alt="Help" height="11" src="/coreweb/images/long_help4.gif" style="border: none" width="19"></a></font></td>
+<td align="right">Not logged in | <a href="/geo/submitter?ix=1b97LsbGeXPbCUv8-JLDcSXxK502QWBzFgqnAWFK-nVrF151dyNCTtR7WtmLNwvu45VWSxm9YEP_oFFqZKMpdaHXsmrstBdbncP">Login</a><a href="javascript:RPopUpWindow_Set(geologinbar_login,260,200,'','','#E1EAE6','','#538AA9','MessageBox2');" onmouseout="RPopUpWindow_Stop()"><img alt="Help" height="11" src="/coreweb/images/long_help4.gif" style="border: none" width="19"></a></td>
+</tr></table>
+                    </td>
+                    <td width=1 background="/coreweb/template1/pix/main_right_bg.gif"><img src="/coreweb/template1/pix/main_right_bg.gif" width="4" height="3" alt="" border="0"></td>
+                </tr>
+                <tr>
+                    <td background="/coreweb/template1/pix/main_left_bg.gif"><img src="/coreweb/template1/pix/main_left_bg.gif" width="4" height="1" alt="" border="0"></td>
+                    <td width="10000" bgcolor="#E0EEEE"><img src="/coreweb/template1/pix/pixel.gif" width="1" height="1" alt="" border="0"></td>
+                    <td align="right" background="/coreweb/template1/pix/main_right_bg.gif"><img src="/coreweb/template1/pix/main_right_bg.gif" alt="" width="4" height="1" border="0"></td>
+                </tr>
+
+                <tr>
+                    <td background="/coreweb/template1/pix/main_left_bg.gif"><img src="/coreweb/template1/pix/main_left_bg.gif" width="4" height="3" alt="" border="0"></td>
+                    <td width="100%" bgcolor="White">
+                        <table width="98%" border="0" align="center">
+                            <tr>
+                                <td>
+                                    <table border="0" cellspacing="0" cellpadding="0" align="right" width="100%">
+                                        <tr>
+                                            <td>
+
+ <script type="text/javascript" src="acc.js"></script>
+ <span id="msg_err" style="color:red"></span>
+ <span id="msg_info" style="color:blue"></span>
+<table cellpadding="0" cellspacing="0" style="border: 1px solid #C0F8FF"><tr><td><img alt=" " height="35" src="/coreweb/template1/pix/pixel.gif" width="1"></td>
+<td bgcolor="#F0F8FF" width="100%"><font color="#0066CC" face="Arial" size="1"><div id="HelpMessage" style="font: 11px/11px arial, sans-serif"><strong>GEO help:</strong> Mouse over screen elements for information.</div></font></td>
+</tr></table>
+<form action="acc.cgi" enctype="application/x-www-form-urlencoded" id="ViewOptions" method="POST" name="ViewOptions" target="_self"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td></td>
+<td bgcolor="#CCCCCC" nowrap valign="middle" width="100%"><table align="left" border="0" cellpadding="0" cellspacing="0"><tr><td nowrap><table border="0" cellpadding="0" cellspacing="0"><tr><td valign="middle"><input id="token" name="token" type="hidden" value=""><label for="scope">Scope: </label><select id="scope" name="targ" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_scope)" style="font-size: 10px"><option selected value="self">Self</option>
+<option value="gpl">Platform</option>
+<option value="gsm">Samples</option>
+<option value="gse">Series</option>
+<option value="all">Family</option>
+</select>
+&nbsp;&nbsp;<label for="form">Format: </label><select id="form" name="form" onchange="OnFormFieldChange()" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_format)" style="font-size: 10px"><option value="html">HTML</option>
+<option value="text">SOFT</option>
+<option value="xml">MINiML</option>
+</select>
+&nbsp;&nbsp;<label for="view">Amount: </label><select id="view" name="view" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_amount)" style="font-size: 10px"><option value="brief">Brief</option>
+<option selected value="quick">Quick</option>
+</select>
+&nbsp;<label for="geo_acc">GEO accession: </label><input id="geo_acc" name="acc" onkeydown="ViewOptionsFormKeyDown(event)" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_acc)" style="font-size: 10px" type="text" value="GSE33630">&nbsp;&nbsp;</td>
+<td valign="middle"><img alt="Go" border="0" onclick="SubmitViewOptionsForm()" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_go)" src="/geo/img/buttons/go_button.gif"></td>
+</tr></table></td></tr></table></td>
+</tr></table></form>
+    <table><tr><td><table cellpadding="2" cellspacing="0" width="600"><tr bgcolor="#cccccc" valign="top"><td colspan="2"><table width="600"><tr><td><strong class="acc" id="GSE33630"><a href="/geo/query/acc.cgi?acc=GSE33630" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">Series GSE33630</a></strong></td>
+<td></td>
+<td align="right" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_gds)"><a href="/gds/?term=GSE33630[Accession]">Query DataSets for GSE33630</a></td>
+</tr></table></td></tr>
+<tr valign="top"><td>Status</td>
+<td>Public on Nov 09, 2012</td>
+</tr>
+<tr valign="top"><td nowrap>Title</td>
+<td style="text-align: justify">Normal thyrocytes vs papillary vs anaplastic thyroid carcinomas</td>
+</tr>
+<tr valign="top"><td nowrap>Organism</td>
+<td><a href="/Taxonomy/Browser/wwwtax.cgi?mode=Info&amp;id=9606" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_organismus)">Homo sapiens</a></td>
+</tr>
+<tr valign="top"><td nowrap>Experiment type</td>
+<td>Expression profiling by array<br></td>
+</tr>
+<tr valign="top"><td nowrap>Summary</td>
+<td style="text-align: justify">We profiled the gene expression of 11 anaplastic thyroid carcinomas (ATC), 49 papillary thyroid carcinomas (PTC) and 45 normal thyroids (N)<br></td>
+</tr>
+<tr valign="top"><td nowrap>&nbsp;</td>
+<td></td>
+</tr>
+<tr valign="top"><td nowrap>Overall design</td>
+<td style="text-align: justify">We hibridized a series of anaplastic thyroid carcinomas (ATC) and papillary thyroid carcinomas (PTC) onto Affymetrix U133 Plus 2.0 arrays. ATCs were obtained from different hospitals in France and Belgium. Paired RNA samples of PTCs and non-tumoral thyroid tissues were obtained from Ukraine via the Chernobyl Tissue Bank (www.chernobyltissuebank.com). Diagnoses were confirmed by the members of the International Pathology Panel of the Chernobyl Tissue Bank.<br></td>
+</tr>
+<tr valign="top"><td nowrap>&nbsp;</td>
+<td></td>
+</tr>
+<tr valign="top"><td>Contributor(s)</td>
+<td><a href="/pubmed/?term=Tomas G[Author]">Tomas G</a>, <a href="/pubmed/?term=Vincent D[Author]">Vincent D</a></td>
+</tr>
+<tr valign="top"><td nowrap>Citation(s)</td>
+<td><span class="pubmed_id" id="22266856,22828612"><a href="/pubmed/22266856">22266856</a>, <a href="/pubmed/22828612">22828612</a></span></td>
+</tr>
+<tr valign="top"><td colspan="2"><span id="geo2r"></span> <span id="rnaseq_counts"></span></td></tr>
+<tr bgcolor="#eeeeee" valign="top"><td>Submission date</td>
+<td>Nov 11, 2011</td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td>Last update date</td>
+<td>Mar 25, 2019</td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td>Contact name</td>
+<td>Gil Tomas</td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td nowrap>E-mail(s)</td>
+<td><a href="mailto:gil.tomas@ulb.ac.be">gil.tomas@ulb.ac.be</a><br></td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td nowrap>Organization name</td>
+<td style="text-align: justify">ULB<br></td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td nowrap>Department</td>
+<td style="text-align: justify">IRIBHM<br></td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td nowrap>Street address</td>
+<td style="text-align: justify">808 route de Lennik<br></td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td nowrap>City</td>
+<td style="text-align: justify">Brussels</td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td nowrap>ZIP/Postal code</td>
+<td style="text-align: justify">1070</td>
+</tr>
+<tr bgcolor="#eeeeee" valign="top"><td nowrap>Country</td>
+<td style="text-align: justify">Belgium</td>
+</tr>
+<tr valign="top"><td nowrap>&nbsp;</td>
+<td></td>
+</tr>
+<tr valign="top"><td>Platforms (1)</td>
+<td onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)"><table cellpadding="3" style="position:relative;top:-5px;left:-5px"><tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GPL570" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GPL570</a></td>
+<td valign="top">[HG-U133_Plus_2] Affymetrix Human Genome U133 Plus 2.0 Array</td>
+</tr></table></td>
+</tr>
+<tr valign="top"><td>Samples (105)<div id="L1844784683divshown" name="L1844784683divshown" style="display: none"><a href="javascript:HandleVisibilityChangeL1844784683()"><img alt="Less..." border="0" src="/geo/img/minus_close.gif">&nbsp;Less...</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+<div id="L1844784683divhidden" name="L1844784683divhidden" style="display: block"><a href="javascript:HandleVisibilityChangeL1844784683()"><img alt="More..." border="0" src="/geo/img/plus_small.gif">&nbsp;More...</a></div>
+</td>
+<td onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)"><table cellpadding="3" style="position:relative;top:-5px;left:-5px"><tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831749" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831749</a></td>
+<td valign="top">ATC23</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831750" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831750</a></td>
+<td valign="top">ATC24</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831751" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831751</a></td>
+<td valign="top">ATC12</td>
+</tr>
+</table>
+<script language="Javascript" type="text/javascript">
+<!--
+function HandleVisibilityChangeL1844784683(){if(document.getElementById("L1844784683div").style.display == "block"){document.getElementById("L1844784683div").style.display = "none";document.getElementById("L1844784683divhidden").style.display = "block";document.getElementById("L1844784683divshown").style.display = "none";}else{document.getElementById("L1844784683div").style.display = "block";document.getElementById("L1844784683divhidden").style.display = "none";document.getElementById("L1844784683divshown").style.display = "block";}}
+-->
+</script>
+<div id="L1844784683div" name="L1844784683div" style="display: none"><table cellpadding="3" style="position:relative;top:-5px;left:-5px"><tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831752" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831752</a></td>
+<td valign="top">ATC13</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831753" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831753</a></td>
+<td valign="top">ATC14</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831754" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831754</a></td>
+<td valign="top">ATC15</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831755" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831755</a></td>
+<td valign="top">ATC16</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831756" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831756</a></td>
+<td valign="top">ATC17</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831757" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831757</a></td>
+<td valign="top">ATC21</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831758" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831758</a></td>
+<td valign="top">ATC22</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831759" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831759</a></td>
+<td valign="top">1030T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831760" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831760</a></td>
+<td valign="top">103T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831761" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831761</a></td>
+<td valign="top">1053T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831762" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831762</a></td>
+<td valign="top">1144T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831763" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831763</a></td>
+<td valign="top">1175T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831764" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831764</a></td>
+<td valign="top">1190T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831765" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831765</a></td>
+<td valign="top">1208T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831766" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831766</a></td>
+<td valign="top">1224T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831767" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831767</a></td>
+<td valign="top">1243T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831768" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831768</a></td>
+<td valign="top">1247T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831769" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831769</a></td>
+<td valign="top">130T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831770" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831770</a></td>
+<td valign="top">1319T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831771" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831771</a></td>
+<td valign="top">1328T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831772" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831772</a></td>
+<td valign="top">1337T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831773" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831773</a></td>
+<td valign="top">1367T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831774" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831774</a></td>
+<td valign="top">1426T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831775" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831775</a></td>
+<td valign="top">144T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831776" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831776</a></td>
+<td valign="top">145T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831777" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831777</a></td>
+<td valign="top">147T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831778" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831778</a></td>
+<td valign="top">1486T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831779" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831779</a></td>
+<td valign="top">1502T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831780" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831780</a></td>
+<td valign="top">165T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831781" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831781</a></td>
+<td valign="top">242T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831782" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831782</a></td>
+<td valign="top">243T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831783" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831783</a></td>
+<td valign="top">249T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831784" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831784</a></td>
+<td valign="top">307T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831785" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831785</a></td>
+<td valign="top">343T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831786" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831786</a></td>
+<td valign="top">366T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831787" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831787</a></td>
+<td valign="top">411T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831788" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831788</a></td>
+<td valign="top">446T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831789" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831789</a></td>
+<td valign="top">465T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831790" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831790</a></td>
+<td valign="top">501T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831791" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831791</a></td>
+<td valign="top">502T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831792" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831792</a></td>
+<td valign="top">515T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831793" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831793</a></td>
+<td valign="top">557T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831794" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831794</a></td>
+<td valign="top">574T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831795" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831795</a></td>
+<td valign="top">601T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831796" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831796</a></td>
+<td valign="top">607T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831797" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831797</a></td>
+<td valign="top">615T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831798" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831798</a></td>
+<td valign="top">686T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831799" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831799</a></td>
+<td valign="top">710T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831800" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831800</a></td>
+<td valign="top">752T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831801" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831801</a></td>
+<td valign="top">758T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831802" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831802</a></td>
+<td valign="top">771T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831803" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831803</a></td>
+<td valign="top">886T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831804" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831804</a></td>
+<td valign="top">905T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831805" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831805</a></td>
+<td valign="top">939T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831806" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831806</a></td>
+<td valign="top">954T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831807" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831807</a></td>
+<td valign="top">964T</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831808" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831808</a></td>
+<td valign="top">1030N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831809" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831809</a></td>
+<td valign="top">103N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831810" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831810</a></td>
+<td valign="top">1053N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831811" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831811</a></td>
+<td valign="top">1144N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831812" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831812</a></td>
+<td valign="top">1175N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831813" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831813</a></td>
+<td valign="top">1190N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831814" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831814</a></td>
+<td valign="top">1208N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831815" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831815</a></td>
+<td valign="top">1224N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831816" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831816</a></td>
+<td valign="top">1243N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831817" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831817</a></td>
+<td valign="top">1247N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831818" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831818</a></td>
+<td valign="top">130N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831819" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831819</a></td>
+<td valign="top">1319N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831820" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831820</a></td>
+<td valign="top">1328N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831821" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831821</a></td>
+<td valign="top">1337N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831822" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831822</a></td>
+<td valign="top">1367N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831823" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831823</a></td>
+<td valign="top">1426N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831824" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831824</a></td>
+<td valign="top">144N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831825" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831825</a></td>
+<td valign="top">145N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831826" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831826</a></td>
+<td valign="top">147N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831827" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831827</a></td>
+<td valign="top">1486N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831828" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831828</a></td>
+<td valign="top">1502N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831829" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831829</a></td>
+<td valign="top">165N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831830" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831830</a></td>
+<td valign="top">242N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831831" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831831</a></td>
+<td valign="top">243N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831832" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831832</a></td>
+<td valign="top">249N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831833" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831833</a></td>
+<td valign="top">307N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831834" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831834</a></td>
+<td valign="top">343N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831835" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831835</a></td>
+<td valign="top">366N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831836" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831836</a></td>
+<td valign="top">446N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831837" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831837</a></td>
+<td valign="top">501N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831838" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831838</a></td>
+<td valign="top">502N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831839" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831839</a></td>
+<td valign="top">515N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831840" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831840</a></td>
+<td valign="top">574N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831841" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831841</a></td>
+<td valign="top">601N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831842" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831842</a></td>
+<td valign="top">615N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831843" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831843</a></td>
+<td valign="top">686N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831844" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831844</a></td>
+<td valign="top">691N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831845" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831845</a></td>
+<td valign="top">710N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831846" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831846</a></td>
+<td valign="top">758N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831847" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831847</a></td>
+<td valign="top">771N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831848" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831848</a></td>
+<td valign="top">886N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831849" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831849</a></td>
+<td valign="top">905N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831850" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831850</a></td>
+<td valign="top">939N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831851" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831851</a></td>
+<td valign="top">954N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831852" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831852</a></td>
+<td valign="top">964N</td>
+</tr>
+<tr><td valign="top"><a href="/geo/query/acc.cgi?acc=GSM831853" onmouseout="onLinkOut('HelpMessage' , geo_empty_help)" onmouseover="onLinkOver('HelpMessage' , geoaxema_recenter)">GSM831853</a></td>
+<td valign="top">ATC11</td>
+</tr>
+</table></div>
+</td>
+</tr>
+<tr valign="top"><td colspan="2"><strong>Relations</strong></td></tr>
+<tr valign="top"><td>BioProject</td>
+<td><a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA148623">PRJNA148623</a></td>
+</tr>
+</table>
+<br><span id="gdv"></span><table cellspacing="3" width="600"><tr bgcolor="#eeeeee"><td><strong>Download family</strong></td>
+<td><strong>Format</strong></td>
+</tr>
+<tr><td><a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE33nnn/GSE33630/soft/" target="_blank">SOFT formatted family file(s)</a></td>
+<td>SOFT<a href="javascript:RPopUpWindow_Set(geoaxema_famsoft,260,120,'','','#E1EAE6','','#538AA9','MessageBox2');" onmouseout="RPopUpWindow_Stop()"><img alt="Help" height="11" src="/coreweb/images/long_help4.gif" style="border: none" width="19"></a></td>
+</tr>
+<tr><td><a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE33nnn/GSE33630/miniml/" target="_blank">MINiML formatted family file(s)</a></td>
+<td>MINiML<a href="javascript:RPopUpWindow_Set(geoaxema_famminiml,260,120,'','','#E1EAE6','','#538AA9','MessageBox2');" onmouseout="RPopUpWindow_Stop()"><img alt="Help" height="11" src="/coreweb/images/long_help4.gif" style="border: none" width="19"></a></td>
+</tr>
+<tr><td><a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE33nnn/GSE33630/matrix/" target="_blank">Series Matrix File(s)</a></td>
+<td>TXT<a href="javascript:RPopUpWindow_Set(geoaxema_fammatrix,260,210,'','','#E1EAE6','','#538AA9','MessageBox2');" onmouseout="RPopUpWindow_Stop()"><img alt="Help" height="11" src="/coreweb/images/long_help4.gif" style="border: none" width="19"></a></td>
+</tr>
+</table>
+<br><table cellpadding="2" cellspacing="2" width="600"><tr bgcolor="#eeeeee" valign="top"><td align="middle" bgcolor="#CCCCCC"><strong>Supplementary file</strong></td>
+<td align="middle" bgcolor="#CCCCCC"><strong>Size</strong></td>
+<td align="middle" bgcolor="#CCCCCC"><strong>Download</strong></td>
+<td align="middle" bgcolor="#CCCCCC"><strong>File type/resource</strong></td>
+</tr>
+<tr valign="top"><td bgcolor="#DEEBDC">GSE33630_RAW.tar</td>
+<td bgcolor="#DEEBDC" title="890337280">849.1 Mb</td>
+<td bgcolor="#DEEBDC"><a href="/geo/download/?acc=GSE33630&amp;format=file">(http)</a><a id="customDl" href="">(custom)</a></td>
+<td bgcolor="#DEEBDC">TAR (of CEL)</td>
+</tr>
+<tr valign="top"><td bgcolor="#EEEEEE">GSE33630_clinical-annotation.txt.gz</td>
+<td bgcolor="#EEEEEE" title="2909">2.8 Kb</td>
+<td bgcolor="#EEEEEE"><a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE33nnn/GSE33630/suppl/GSE33630%5Fclinical%2Dannotation%2Etxt%2Egz">(ftp)</a><a href="/geo/download/?acc=GSE33630&amp;format=file&amp;file=GSE33630%5Fclinical%2Dannotation%2Etxt%2Egz">(http)</a></td>
+<td bgcolor="#EEEEEE">TXT</td>
+</tr>
+<tr><td class="message">Processed data included within Sample table</td></tr>
+</table>
+<span id="customDlArea"></span><br></td></tr></table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td background="/coreweb/template1/pix/main_right_bg.gif"><img src="/coreweb/template1/pix/main_right_bg.gif" width="4" height="3" alt="" border="0"></td>
+    </tr>
+    <tr>
+        <td background="/coreweb/template1/pix/but_left.gif"><img src="/coreweb/template1/pix/but_left.gif" width="4" height="4" alt="" border="0"></td>
+        <td width="10000" bgcolor="#FFFFFF" background="/coreweb/template1/pix/but_mid_bg.gif"><img src="/coreweb/template1/pix/pixel.gif" width="1" height="1" alt="" border="0"></td>
+        <td align="right" background="/coreweb/template1/pix/but_right.gif"><img src="/coreweb/template1/pix/but_right.gif" alt="" width="4" height="4" border="0"></td>
+    </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+	<tr>
+        <td width="99%"><img src="/coreweb/template1/pix/pixel.gif" width="1" height="1" alt="" border="0"></td><td valign="top" align="right"  nowrap>
+	        <span class="HELPBAR">|<A HREF="https://www.nlm.nih.gov"> NLM </A>|<A HREF="https://www.nih.gov" CLASS="HELPBAR"> NIH </A>|<A HREF="mailto:geo@ncbi.nlm.nih.gov" CLASS="HELPBAR"> GEO Help </A>|<A HREF="/geo/info/disclaimer.html" CLASS="HELPBAR"> Disclaimer </A>|<a href="https://www.nlm.nih.gov/accessibility.html" class="HELPBAR"> Accessibility </a>|</span><br>
+        </td>
+	</tr>
+</table>
+
+
+<map name="unlmenu">
+<area alt="NCBI Home" coords="2,0,39,15" href="/" onMouseOver="changpics(unl_menu_pix, unl_menu_home_a)" onMouseOut="changpics(unl_menu_pix, unl_menu_noa)">
+<area alt="NCBI Search" coords="40,0,91,15" href="/ncbisearch/" onMouseOver="changpics(unl_menu_pix, unl_menu_search_a)" onMouseOut="changpics(unl_menu_pix, unl_menu_noa)">
+<area alt="NCBI SiteMap" coords="92,0,143,15" href="/Sitemap/" onMouseOver="changpics(unl_menu_pix, unl_menu_sitemap_a)" onMouseOut="changpics(unl_menu_pix, unl_menu_noa)">
+</map>
+
+<script type="text/javascript" 
+  src="/portal/portal3rc.fcgi/rlib/js/InstrumentNCBIBaseJS/InstrumentPageStarterJS.js"> </script>
+</body>
+</html>
+
+

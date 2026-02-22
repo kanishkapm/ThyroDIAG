@@ -1,0 +1,9 @@
+Library,Term,P-value,-log10(p-value),Genes
+KEGG,Thyroid cancer,0.001,3.0,"DIO1,NIS,TG,TPO"
+KEGG,PI3K-Akt signaling pathway,0.005,2.3,"EGFR,PIK3CA,AKT1"
+KEGG,MAPK signaling pathway,0.01,2.0,"BRAF,RAF1,EGFR"
+Reactome,Thyroid hormone biosynthesis,0.0001,4.0,"DIO1,TG,TPO,NIS"
+Reactome,Signal Transduction,0.003,2.5,"EGFR,BRAF,AKT1"
+GO,hormone metabolic process,0.002,2.7,"DIO1,TG,TPO"
+GO,thyroid follicle development,0.004,2.4,"TG,TPO,TSHR"
+Hallmark,Epithelial mesenchymal transition,0.02,1.7,"ZEB1,SNAI1"

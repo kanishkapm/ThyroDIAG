@@ -1,0 +1,16 @@
+{
+  "cnn_accuracy": 0.8758620619773865,
+  "lstm_accuracy": 0.5586206912994385,
+  "n_samples": 722,
+  "n_genes": 50,
+  "n_classes": 6,
+  "classes": [
+    "ATC",
+    "FTC",
+    "Normal",
+    "PDTC",
+    "PTC",
+    "PTC-FV"
+  ],
+  "data_source": "GEO + TCGA (Real Data)"
+}

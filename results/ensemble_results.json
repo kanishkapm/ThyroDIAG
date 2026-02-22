@@ -1,0 +1,6 @@
+{
+  "test_accuracy": 1.0,
+  "rf_accuracy": 1.0,
+  "svm_accuracy": 1.0,
+  "lr_accuracy": 1.0
+}

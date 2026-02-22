@@ -1,0 +1,22 @@
+{
+  "Random Forest": {
+    "test_accuracy": 0.6527777777777778,
+    "cv_mean": 0.8313131313131313,
+    "cv_std": 0.0923345040971834
+  },
+  "Logistic Regression": {
+    "test_accuracy": 0.5254629629629629,
+    "cv_mean": 0.5868686868686869,
+    "cv_std": 0.12185854566888386
+  },
+  "Gradient Boosting": {
+    "test_accuracy": 0.6064814814814815,
+    "cv_mean": 0.8181818181818183,
+    "cv_std": 0.10813271669553647
+  },
+  "Ensemble": {
+    "test_accuracy": 0.6504629629629629,
+    "cv_mean": 0.7454545454545455,
+    "cv_std": 0.1074419221538679
+  }
+}
