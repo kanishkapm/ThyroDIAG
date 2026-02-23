@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Data files
+*.csv
+*.json
+*.xlsx
+*.xls
+*.h5
+*.hdf5
+*.txt
+
+# Model files
+*.h5
+*.pth
+*.ckpt
+*.pkl
+*.model
+
+# Results
+*.log
+*.out
+results/
+
+# IDE configurations
+.vscode/
+.idea/
+*.sublime-*
